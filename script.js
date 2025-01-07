@@ -39,5 +39,31 @@ function draw() {
     }
   }
 
+  ctx.fillStyle = player.color;
+  ctx.fillRect(player.x, player.y, player.w, player.h);
+
+  // player control
+  if (aPressed) {
+    player.x = player.x - player.xSpeed;
+  }
+
+  if (dPressed) {
+    player.x = player.x + player.xSpeed;
+  }
+
+  // player blocked at edges
+  if (player.x <= 0) {
+    player.x = 0;
+  }
+
+  if (player.x + player.w >= cnv.width) {
+    player.x = cnv.width - player.w;
+  }
+
+  // player jump
+  if (wPressed) {
+    jump();
+  }
+
   requestAnimationFrame(draw);
 }
