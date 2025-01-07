@@ -39,13 +39,14 @@ let score = 0;
 // Player object
 let player = {
   x: cnv.width / 2 - 15, // start @ middle of width
-  y: cnv.height - 30, // start @ bottom canvas
+  y: cnv.height - 60, // start @ bottom canvas
   xSpeed: 5,
   ySpeed: 0,
-  w: 30,
-  h: 30,
+  w: 60,
+  h: 60,
   onGround: true,
-  gravity: 20,
+  gravity: 110,
+  colour: "black",
 };
 
 // Event Handlers
@@ -74,29 +75,6 @@ function keyupHandler(event) {
   if (event.code == "KeyD") {
     dPressed = false;
   }
-}
-
-// player control
-if (aPressed) {
-  player.x = player.x - player.xSpeed;
-}
-
-if (dPressed) {
-  player.x = player.x + player.xSpeed;
-}
-
-// player blocked at edges
-if (player.x <= 0) {
-  player.x = 0;
-}
-
-if (player.x + player.w >= cnv.width) {
-  player.x = cnv.width - player.w;
-}
-
-// player jump
-if (wPressed) {
-  jump();
 }
 
 //Draw Objects
