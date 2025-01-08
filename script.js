@@ -1,69 +1,42 @@
 //Game
+//Set up Graphics content
+let cnv = document.getElementById("myCanvas");
+let ctx = cnv.getContext("2d");
+cnv.width = 1000;
+cnv.height = 600;
 
-let objects = [];
+//Global Variables
+let playerImg;
 
-for (let i = 0; i < 10; i++) {
-  objects.push({
-    x: randomInt(0, cnv.width),
-    y: randomInt(0, cnv.height),
-    speed: Math.round(randomInt(2, 15)),
-    width: randomInt(40, 90),
-    height: randomInt(40, 80),
-  });
-}
+let state;
+let best = 0;
+let score = 0;
 
-requestAnimationFrame(draw);
+// Control Variables
+aPressed = false;
+dPressed = false;
+wPressed = false;
+
+reset();
+
+//Draw Function
+window.addEventListener("load", draw);
 
 function draw() {
   //clear previous frame
   ctx.fillStyle = "rgb(69, 42, 92)";
   ctx.fillRect(0, 0, 1000, 600);
 
-  for (let i = 0; i < objects.length; i++) {
-    ctx.fillStyle = "blue";
-    rect(
-      objects[i].x,
-      objects[i].y,
-      objects[i].width,
-      objects[i].height,
-      "fill"
-    );
-  }
-
-  for (let i = 0; i < objects.length; i++) {
-    objects[i].x -= objects[i].speed;
-
-    if (objects[i].x + objects[i].width < 0) {
-      objects[i].x = 1000;
-      objects.y = Math.random() * 500 + 100;
+  function draw() {
+    if (state == "start") {
+      drawStart();
+    } else if (state === "gameon") {
+      runGame();
+    } else if (state === "gameover") {
+      drawGameOver();
     }
-  }
-
-  ctx.fillStyle = player.color;
-  ctx.fillRect(player.x, player.y, player.w, player.h);
-
-  // player control
-  if (aPressed) {
-    player.x = player.x - player.xSpeed;
-  }
-
-  if (dPressed) {
-    player.x = player.x + player.xSpeed;
-  }
-
-  // player blocked at edges
-  if (player.x <= 0) {
-    player.x = 0;
-  }
-
-  if (player.x + player.w >= cnv.width) {
-    player.x = cnv.width - player.w;
-  }
-
-  // player jump
-  if (wPressed) {
-    jump();
   }
 
   requestAnimationFrame(draw);
 }
+
