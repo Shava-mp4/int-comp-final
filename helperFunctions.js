@@ -32,3 +32,24 @@ function circle(x, y, r, mode) {
     ctx.stroke();
   }
 }
+
+//Player Control
+function jump() {
+  if (player.onGround) {
+    player.y = player.y - player.gravity;
+    player.onGround = false;
+    player.gravity--;
+  } else {
+    //player is in mid-jump
+    player.y = player.y - player.gravity;
+    player.gravity -= 5;
+
+    //check if back on ground
+    if (player.y + player.h >= 400) {
+      player.y = cnv.height - player.h;
+      player.onGround = true;
+      player.gravity = 100;
+      wPressed = false;
+    }
+  }
+}
