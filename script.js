@@ -1,9 +1,4 @@
 //Game
-//Set up Graphics content
-let cnv = document.getElementById("myCanvas");
-let ctx = cnv.getContext("2d");
-cnv.width = 1000;
-cnv.height = 600;
 
 //Global Variables
 let playerImg;
@@ -38,5 +33,37 @@ function draw() {
   }
 
   requestAnimationFrame(draw);
+}
+
+// Event Handlers
+document.addEventListener("keydown", keydownHandler);
+document.addEventListener("keyup", keyupHandler);
+
+function keydownHandler(event) {
+  if (event.code == "KeyA") {
+    aPressed = true;
+  }
+
+  if (event.code == "KeyD") {
+    dPressed = true;
+  }
+
+  if (event.code == "KeyW") {
+    wPressed = true;
+  }
+
+  if (state === "start") {
+    state = "gameon";
+  }
+}
+
+function keyupHandler(event) {
+  if (event.code == "KeyA") {
+    aPressed = false;
+  }
+
+  if (event.code == "KeyD") {
+    dPressed = false;
+  }
 }
 
