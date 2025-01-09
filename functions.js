@@ -1,18 +1,36 @@
 //Functions
+//Set up Graphics content
+let cnv = document.getElementById("myCanvas");
+let ctx = cnv.getContext("2d");
+cnv.width = 1000;
+cnv.height = 600;
+
+// Player object
+let player = {
+  x: cnv.width / 2 - 15, // start @ middle of width
+  y: cnv.height - 60, // start @ bottom canvas
+  xSpeed: 5,
+  ySpeed: 0,
+  w: 60,
+  h: 60,
+  onGround: true,
+  gravity: 100,
+  color: "black",
+};
 
 //Draw Start
 function drawStart() {
   ctx.fillStyle = "black";
-  rect(0, 0, 1000, 600);
+  rect(0, 0, 1000, 600, "fill");
 
   // Start Text
   ctx.font = "40px Consolas";
   ctx.fillStyle = "lightblue";
-  ctx.fillText("W TO START", 450, 285);
+  ctx.fillText("W TO START", 395, 285);
 
   ctx.font = "25px Consolas";
-  ctx.fillText("Press W to jump", 100, 450);
-  ctx.fillText("Press A to go forward and D for backwards", 415, 480);
+  ctx.fillText("Press W to jump", 400, 400);
+  ctx.fillText("Press A to go forward and D for backwards", 230, 440);
 }
 
 //Draw Game
@@ -76,27 +94,6 @@ function playerControl() {
   }
 }
 
-//Player Control
-function jump() {
-  if (player.onGround) {
-    player.y = player.y - player.gravity;
-    player.onGround = false;
-    player.gravity--;
-  } else {
-    //player is in mid-jump
-    player.y = player.y - player.gravity;
-    player.gravity -= 5;
-
-    //check if back on ground
-    if (player.y + player.h >= 400) {
-      player.y = cnv.height - player.h;
-      player.onGround = true;
-      player.gravity = 20;
-      wPressed = false;
-    }
-  }
-}
-
 function drawMainComponents() {
   // Background/environment and score
   ctx.fillStyle = "white";
@@ -141,19 +138,6 @@ function drawGameOver() {
 function reset() {
   state = "start";
 
-  // Player object
-  let player = {
-    x: cnv.width / 2 - 15, // start @ middle of width
-    y: cnv.height - 60, // start @ bottom canvas
-    xSpeed: 5,
-    ySpeed: 0,
-    w: 60,
-    h: 60,
-    onGround: true,
-    gravity: 110,
-    color: "black",
-  };
-
   let objects = [];
 
   for (let i = 0; i < 5; i++) {
@@ -169,37 +153,3 @@ function reset() {
   score = 0;
 }
 
-// Event Handlers
-document.addEventListener("keydown", keydownHandler);
-document.addEventListener("keyup", keyupHandler);
-
-function keydownHandler(event) {
-  if (event.code == "KeyA") {
-    aPressed = true;
-  }
-
-  if (event.code == "KeyD") {
-    dPressed = true;
-  }
-
-  if (event.code == "KeyW") {
-    wPressed = true;
-    if (state === "start") {
-      state = "gameon";
-    }
-  }
-}
-
-function keyupHandler(event) {
-  if (event.code == "KeyA") {
-    aPressed = false;
-  }
-
-  if (event.code == "KeyD") {
-    dPressed = false;
-  }
-}
-
-  // Start Background
-  //Draw Player Character
-}
