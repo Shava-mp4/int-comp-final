@@ -42,14 +42,27 @@ function jump() {
   } else {
     //player is in mid-jump
     player.y = player.y - player.gravity;
-    player.gravity -= 5;
+    player.gravity--;
 
     //check if back on ground
-    if (player.y + player.h >= 400) {
+    if (player.y + player.h >= 600) {
       player.y = cnv.height - player.h;
       player.onGround = true;
-      player.gravity = 100;
+      player.gravity = 20;
       wPressed = false;
     }
+  }
+}
+
+function rectCollide(rect1, rect2) {
+  if (
+    rect1.x + rect1.width > rect2.x &&
+    rect1.x < rect2.x + rect2.width &&
+    rect1.y + rect1.height > rect2.y &&
+    rect1.y < rect2.y + rect2.height
+  ) {
+    return true;
+  } else {
+    return false;
   }
 }
