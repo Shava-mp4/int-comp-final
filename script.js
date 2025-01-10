@@ -3,7 +3,7 @@
 //Global Variables
 let playerImg;
 
-let state;
+let state = "gameon";
 let best = 0;
 let score = 0;
 
@@ -11,6 +11,7 @@ let score = 0;
 aPressed = false;
 dPressed = false;
 wPressed = false;
+pPressed = false;
 
 reset();
 
@@ -23,9 +24,7 @@ function draw() {
   ctx.fillRect(0, 0, 1000, 600);
 
   function draw() {
-    if (state == "start") {
-      drawStart();
-    } else if (state === "gameon") {
+    if (state === "gameon") {
       runGame();
     } else if (state === "gameover") {
       drawGameOver();
@@ -52,8 +51,11 @@ function keydownHandler(event) {
     wPressed = true;
   }
 
-  if (state === "start") {
-    state = "gameon";
+  if (event.code == "KeyP") {
+    pPressed = true;
+    if (state === "start") {
+      state = "gameon";
+    }
   }
 }
 
@@ -64,6 +66,10 @@ function keyupHandler(event) {
 
   if (event.code == "KeyD") {
     dPressed = false;
+  }
+
+  if (event.code == "KeyP") {
+    pPressed == false;
   }
 }
 
