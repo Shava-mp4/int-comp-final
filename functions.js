@@ -14,32 +14,57 @@ let player = {
   w: 60,
   h: 60,
   onGround: true,
-  gravity: 100,
+  gravity: 20,
   color: "black",
 };
 
-//Draw Start
-function drawStart() {
-  ctx.fillStyle = "black";
-  rect(0, 0, 1000, 600, "fill");
+let objects = [];
 
-  // Start Text
-  ctx.font = "40px Consolas";
-  ctx.fillStyle = "lightblue";
-  ctx.fillText("W TO START", 395, 285);
-
-  ctx.font = "25px Consolas";
-  ctx.fillText("Press W to jump", 400, 400);
-  ctx.fillText("Press A to go forward and D for backwards", 230, 440);
+for (let i = 0; i < 5; i++) {
+  objects.push({
+    width: randomInt(40, 90),
+    height: randomInt(60, 80),
+    x: cnv.width + 200 * i,
+    y: randomInt(0, 550),
+    speed: 10,
+  });
 }
+
+let obstacles = [];
+
+for (let i = 0; i < 5; i++) {
+  obstacles.push({
+    x: cnv.width + 250 * i,
+    y: randomInt(0, cnv.height),
+    speed: 10,
+    width: randomInt(40, 90),
+    height: randomInt(40, 80),
+  });
+}
+
+// //Draw Start
+// function drawStart() {
+//   ctx.fillStyle = "black";
+//   rect(0, 0, 1000, 600, "fill");
+
+//   // Start Text
+//   ctx.font = "40px Consolas";
+//   ctx.fillStyle = "lightblue";
+//   ctx.fillText("W TO START", 395, 285);
+
+//   ctx.font = "25px Consolas";
+//   ctx.fillText("Press W to jump", 400, 400);
+//   ctx.fillText("Press A to go forward and D for backwards", 230, 440);
+// }
 
 //Draw Game
 function runGame() {
-  gameObjects();
-  playerControl();
-
   //Draw
   gameComponents();
+
+  gameObjects();
+  playerControl();
+  checkCollisions();
 }
 
 //Objects
@@ -53,6 +78,9 @@ function gameObjects() {
       objects[i].height,
       "fill"
     );
+    if (rectCollide(player, objects[i])) {
+      gameOver();
+    }
   }
 
   for (let i = 0; i < objects.length; i++) {
@@ -60,7 +88,10 @@ function gameObjects() {
 
     if (objects[i].x + objects[i].width < 0) {
       objects[i].x = 1000;
-      objects.y = Math.random() * 500 + 100;
+      objects[i].y = Math.random() * 500 + 100;
+    }
+    if (rectCollide(player, objects[i])) {
+      gameOver();
     }
   }
 }
@@ -94,8 +125,10 @@ function playerControl() {
   }
 }
 
-function drawMainComponents() {
+function gameComponents() {
   // Background/environment and score
+  // ctx.fillStyle = "white";
+  // rect(0, 0, 1000, 600, "fill");
   ctx.fillStyle = "white";
   rect(800, 0, 200, 100);
 }
@@ -137,18 +170,6 @@ function drawGameOver() {
 
 function reset() {
   state = "start";
-
-  let objects = [];
-
-  for (let i = 0; i < 5; i++) {
-    objects.push({
-      x: cnv.width + 200 * i,
-      y: randomInt(0, cnv.height),
-      speed: Math.round(randomInt(2, 12)),
-      width: randomInt(40, 90),
-      height: randomInt(40, 80),
-    });
-  }
 
   score = 0;
 }
