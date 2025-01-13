@@ -8,7 +8,7 @@ cnv.height = 600;
 // Player object
 let player = {
   x: cnv.width / 2 - 15, // start @ middle of width
-  y: cnv.height - 60, // start @ bottom canvas
+  y: cnv.height - 110, // start @ bottom canvas
   xSpeed: 5,
   ySpeed: 0,
   w: 60,
@@ -35,10 +35,22 @@ let obstacles = [];
 for (let i = 0; i < 5; i++) {
   obstacles.push({
     x: cnv.width + 250 * i,
-    y: randomInt(0, cnv.height),
-    speed: 10,
+    y: randomInt(450, cnv.height),
+    speed: 6,
     width: randomInt(40, 90),
     height: randomInt(40, 80),
+  });
+}
+
+let platforms = [];
+
+for (let i = 0; i < 3; i++) {
+  obstacles.push({
+    x: cnv.width + 250 * i,
+    x2: (cnv.width + 250 * i) + randomInt(10, 50),
+    y: randomInt(200, 400),
+    speed: 6,
+    lineWidth: randomInt(40, 90),
   });
 }
 
@@ -83,23 +95,46 @@ function gameObjects() {
     }
   }
 
-  for (let i = 0; i < objects.length; i++) {
-    objects[i].x -= objects[i].speed;
+  for (let i = 0; i < obstacles.length; i++) {
+    obstacles[i].x -= obstacles[i].speed;
 
-    if (objects[i].x + objects[i].width < 0) {
-      objects[i].x = 1000;
-      objects[i].y = Math.random() * 500 + 100;
+    if (obstacles[i].x + obstacles[i].width < 0) {
+      obstacles[i].x = 1000;
+      obstacles[i].y = Math.random() * 500 + 100;
     }
-    if (rectCollide(player, objects[i])) {
-      gameOver();
+    if (rectCollide(player, obstacles[i])) {
+      player.x -= obstacles.x
     }
   }
+
+  for (let i = 0; i < obstacles.length; i++) {
+    obstacles[i].x -= obstacles[i].speed;
+
+    if (obstacles[i].x + obstacles[i].width < 0) {
+      obstacles[i].x = 1000;
+      obstacles[i].y = Math.random() * 500 + 100;
+    }
+    if (rectCollide(player, obstacles[i])) {
+      player.x -= obstacles.x
+    }
+  }
+
+  for (let i = 0; i < platforms.length; i++) {
+    platforms[i].x -= platforms[i].speed;
+
+    if (platforms[i].x + platforms[i].width < 0) {
+      platforms[i].x = 1000;
+      platforms[i].y = Math.random() * 500 + 100;
+    }
+    if (rectCollide(player, platforms[i])) {
+      player.onGround = true
+  }
+}
 }
 
 //Player
 function playerControl() {
-  ctx.fillStyle = player.color;
-  ctx.fillRect(player.x, player.y, player.w, player.h);
+  ctx.drawImage(playerImg, player.x, player.y);
 
   // player control
   if (aPressed) {
@@ -147,12 +182,7 @@ function checkCollisions() {
 }
 
 function gameOver() {
-  state = "gameover";
-
-  setTimeout(reset, 2000);
-  if (score > best) {
-    best = score;
-  }
+  drawGameOver
 }
 
 function drawGameOver() {
@@ -166,11 +196,13 @@ function drawGameOver() {
   ctx.font = "30px Consolas";
   ctx.fillText(`SCORE: ${score}`, 490, 265);
   ctx.fillText(`BEST: ${best}`, 490, 245);
+
+  document.addEventListener("keypress", keyPressHandler);
+
+function keyPressHandler(event) {
+  if (event.code == "KeyP") {
+    runGame();
+  }
 }
 
-function reset() {
-  state = "start";
-
-  score = 0;
 }
-
