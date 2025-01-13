@@ -47,7 +47,7 @@ let platforms = [];
 for (let i = 0; i < 3; i++) {
   obstacles.push({
     x: cnv.width + 250 * i,
-    x2: (cnv.width + 250 * i) + randomInt(10, 50),
+    x2: cnv.width + 250 * i + randomInt(10, 50),
     y: randomInt(200, 400),
     speed: 6,
     lineWidth: randomInt(40, 90),
@@ -94,16 +94,29 @@ function gameObjects() {
       gameOver();
     }
   }
-
   for (let i = 0; i < obstacles.length; i++) {
-    obstacles[i].x -= obstacles[i].speed;
-
-    if (obstacles[i].x + obstacles[i].width < 0) {
-      obstacles[i].x = 1000;
-      obstacles[i].y = Math.random() * 500 + 100;
+    ctx.fillStyle = "blue";
+    rect(
+      obstacles[i].x,
+      obstacles[i].y,
+      obstacles[i].width,
+      obstacles[i].height,
+      "fill"
+    );
+    if (rectCollide(player, objects[i])) {
+      gameOver();
     }
-    if (rectCollide(player, obstacles[i])) {
-      player.x -= obstacles.x
+  }
+
+  for (let i = 0; i < objects.length; i++) {
+    objects[i].x -= objects[i].speed;
+
+    if (objects[i].x + objects[i].width < 0) {
+      objects[i].x = 1000;
+      objects[i].y = Math.random() * 500 + 100;
+    }
+    if (rectCollide(player, objects[i])) {
+      player.x -= obstacles.x;
     }
   }
 
@@ -115,7 +128,7 @@ function gameObjects() {
       obstacles[i].y = Math.random() * 500 + 100;
     }
     if (rectCollide(player, obstacles[i])) {
-      player.x -= obstacles.x
+      player.x -= obstacles.x;
     }
   }
 
@@ -127,9 +140,9 @@ function gameObjects() {
       platforms[i].y = Math.random() * 500 + 100;
     }
     if (rectCollide(player, platforms[i])) {
-      player.onGround = true
+      player.onGround = true;
+    }
   }
-}
 }
 
 //Player
@@ -164,8 +177,6 @@ function gameComponents() {
   // Background/environment and score
   // ctx.fillStyle = "white";
   // rect(0, 0, 1000, 600, "fill");
-  ctx.fillStyle = "white";
-  rect(800, 0, 200, 100);
 }
 
 function checkCollisions() {
@@ -182,7 +193,7 @@ function checkCollisions() {
 }
 
 function gameOver() {
-  drawGameOver
+  drawGameOver;
 }
 
 function drawGameOver() {
@@ -199,10 +210,9 @@ function drawGameOver() {
 
   document.addEventListener("keypress", keyPressHandler);
 
-function keyPressHandler(event) {
-  if (event.code == "KeyP") {
-    runGame();
+  function keyPressHandler(event) {
+    if (event.code == "KeyP") {
+      runGame();
+    }
   }
-}
-
 }
