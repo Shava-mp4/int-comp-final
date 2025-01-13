@@ -1,34 +1,12 @@
-//Game
-
-//Global Variables
-let playerImg;
-
-let state = "gameon";
-let best = 0;
-let score = 0;
-
-// Control Variables
-aPressed = false;
-dPressed = false;
-wPressed = false;
-pPressed = false;
-
-reset();
-
-//Draw Function
-window.addEventListener("load", draw);
-
 function draw() {
   //clear previous frame
-  ctx.fillStyle = "rgb(69, 42, 92)";
-  ctx.fillRect(0, 0, 1000, 600);
+  ctx.fillStyle = "rgb(189, 238, 244)";
+  rect(0, 0, 1000, 600, "fill");
+  ctx.fillStyle = "rgb(201, 232, 180)"
+  rect(0, 550, 1000, 600, "fill")
 
   function draw() {
-    if (state === "gameon") {
-      runGame();
-    } else if (state === "gameover") {
-      drawGameOver();
-    }
+    runGame();
   }
 
   requestAnimationFrame(draw);
@@ -53,9 +31,6 @@ function keydownHandler(event) {
 
   if (event.code == "KeyP") {
     pPressed = true;
-    if (state === "start") {
-      state = "gameon";
-    }
   }
 }
 
