@@ -4,6 +4,7 @@
 let playerImg = document.createElement("img");
 playerImg.src = "img/hachiware-chiikawa-2.png";
 
+let state = "gameOn";
 let best = 0;
 let score = 0;
 
@@ -17,14 +18,11 @@ pPressed = false;
 window.addEventListener("load", draw);
 
 function draw() {
-  //clear previous frame
-  ctx.fillStyle = "rgb(189, 238, 244)";
-  rect(0, 0, 1000, 600, "fill");
-  ctx.fillStyle = "rgb(201, 232, 180)";
-  rect(0, 550, 1000, 600, "fill");
-
-  function draw() {
+  if (state == "gameOn") {
     runGame();
+  }
+  if (state == "gameOver") {
+    gameOver;
   }
 
   requestAnimationFrame(draw);
@@ -65,7 +63,3 @@ function keyupHandler(event) {
     pPressed == false;
   }
 }
-
-  }
-}
-
