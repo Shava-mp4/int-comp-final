@@ -45,7 +45,7 @@ for (let i = 0; i < 5; i++) {
 let platforms = [];
 
 for (let i = 0; i < 3; i++) {
-  obstacles.push({
+  platforms.push({
     x: cnv.width + 250 * i,
     x2: cnv.width + 250 * i + randomInt(10, 50),
     y: randomInt(200, 400),
@@ -94,19 +94,6 @@ function gameObjects() {
       gameOver();
     }
   }
-  for (let i = 0; i < obstacles.length; i++) {
-    ctx.fillStyle = "blue";
-    rect(
-      obstacles[i].x,
-      obstacles[i].y,
-      obstacles[i].width,
-      obstacles[i].height,
-      "fill"
-    );
-    if (rectCollide(player, objects[i])) {
-      gameOver();
-    }
-  }
 
   for (let i = 0; i < objects.length; i++) {
     objects[i].x -= objects[i].speed;
@@ -121,6 +108,20 @@ function gameObjects() {
   }
 
   for (let i = 0; i < obstacles.length; i++) {
+    ctx.fillStyle = "blue";
+    rect(
+      obstacles[i].x,
+      obstacles[i].y,
+      obstacles[i].width,
+      obstacles[i].height,
+      "fill"
+    );
+    if (rectCollide(player, objects[i])) {
+      gameOver();
+    }
+  }
+
+  for (let i = 0; i < obstacles.length; i++) {
     obstacles[i].x -= obstacles[i].speed;
 
     if (obstacles[i].x + obstacles[i].width < 0) {
@@ -129,6 +130,21 @@ function gameObjects() {
     }
     if (rectCollide(player, obstacles[i])) {
       player.x -= obstacles.x;
+    }
+  }
+
+  for (let i = 0; i < platforms.length; i++) {
+    ctx.fillStyle = "blue";
+    ctx.lineWidth = platforms[i].width;
+    line(
+      platforms[i].x,
+      platforms[i].y,
+      obstacles[i].x2,
+      obstacles[i].y,
+      "stroke"
+    );
+    if (rectCollide(player, objects[i])) {
+      gameOver();
     }
   }
 
@@ -177,6 +193,7 @@ function gameComponents() {
   // Background/environment and score
   // ctx.fillStyle = "white";
   // rect(0, 0, 1000, 600, "fill");
+  ctx.fillStyle = "darkgreen";
 }
 
 function checkCollisions() {
@@ -213,6 +230,9 @@ function drawGameOver() {
   function keyPressHandler(event) {
     if (event.code == "KeyP") {
       runGame();
+    }
+  }
+}
     }
   }
 }
