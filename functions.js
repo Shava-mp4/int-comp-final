@@ -22,37 +22,37 @@ let objects = [];
 
 for (let i = 0; i < 5; i++) {
   objects.push({
-    width: randomInt(40, 90),
-    height: randomInt(60, 80),
-    x: cnv.width + 200 * i,
-    y: randomInt(0, 550),
-    speed: 10,
+    x: cnv.width + 250 * i,
+    y: randomInt(0, 450),
+    width: randomInt(60, 75),
+    height: 60,
+    speed: 7,
   });
 }
 
 let obstacles = [];
 
-for (let i = 0; i < 5; i++) {
-  obstacles.push({
-    x: cnv.width + 250 * i,
-    y: randomInt(450, cnv.height),
-    speed: 6,
-    width: randomInt(40, 90),
-    height: randomInt(40, 80),
-  });
-}
-
-let platforms = [];
-
 for (let i = 0; i < 3; i++) {
-  platforms.push({
-    x: cnv.width + 250 * i,
-    x2: cnv.width + 250 * i + randomInt(10, 50),
-    y: randomInt(200, 400),
-    speed: 6,
-    lineWidth: randomInt(40, 90),
+  obstacles.push({
+    x: cnv.width + 350 * i,
+    y: randomInt(350, 500),
+    speed: 3,
+    width: 100,
+    height: 80,
   });
 }
+
+// let platforms = [];
+
+// for (let i = 0; i < 3; i++) {
+//   platforms.push({
+//     x: cnv.width + 250 * i,
+//     x2: cnv.width + 250 * i + randomInt(10, 50),
+//     y: randomInt(250, 350),
+//     speed: 4,
+//     lineWidth: randomInt(40, 90),
+//   });
+// }
 
 // //Draw Start
 // function drawStart() {
@@ -77,12 +77,13 @@ function runGame() {
   gameObjects();
   playerControl();
   checkCollisions();
+  score++;
 }
 
 //Objects
 function gameObjects() {
   for (let i = 0; i < objects.length; i++) {
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "rgb(252, 192, 209)";
     rect(
       objects[i].x,
       objects[i].y,
@@ -90,9 +91,6 @@ function gameObjects() {
       objects[i].height,
       "fill"
     );
-    if (rectCollide(player, objects[i])) {
-      gameOver();
-    }
   }
 
   for (let i = 0; i < objects.length; i++) {
@@ -100,15 +98,12 @@ function gameObjects() {
 
     if (objects[i].x + objects[i].width < 0) {
       objects[i].x = 1000;
-      objects[i].y = Math.random() * 500 + 100;
-    }
-    if (rectCollide(player, objects[i])) {
-      player.x -= obstacles.x;
+      objects[i].y = randomInt(0, 550);
     }
   }
 
   for (let i = 0; i < obstacles.length; i++) {
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "rgb(140, 193, 250)";
     rect(
       obstacles[i].x,
       obstacles[i].y,
@@ -116,9 +111,6 @@ function gameObjects() {
       obstacles[i].height,
       "fill"
     );
-    if (rectCollide(player, objects[i])) {
-      gameOver();
-    }
   }
 
   for (let i = 0; i < obstacles.length; i++) {
@@ -126,39 +118,30 @@ function gameObjects() {
 
     if (obstacles[i].x + obstacles[i].width < 0) {
       obstacles[i].x = 1000;
-      obstacles[i].y = Math.random() * 500 + 100;
-    }
-    if (rectCollide(player, obstacles[i])) {
-      player.x -= obstacles.x;
+      obstacles[i].y = randomInt(350, 500);
     }
   }
 
-  for (let i = 0; i < platforms.length; i++) {
-    ctx.fillStyle = "blue";
-    ctx.lineWidth = platforms[i].width;
-    line(
-      platforms[i].x,
-      platforms[i].y,
-      obstacles[i].x2,
-      obstacles[i].y,
-      "stroke"
-    );
-    if (rectCollide(player, objects[i])) {
-      gameOver();
-    }
-  }
+  // for (let i = 0; i < platforms.length; i++) {
+  //   ctx.strokeStyle = "rgb(252, 235, 146)";
+  //   ctx.lineWidth = platforms[i].width;
+  //   line(
+  //     platforms[i].x,
+  //     platforms[i].y,
+  //     obstacles[i].x2,
+  //     obstacles[i].y,
+  //     "stroke"
+  //   );
+  // }
 
-  for (let i = 0; i < platforms.length; i++) {
-    platforms[i].x -= platforms[i].speed;
+  // for (let i = 0; i < platforms.length; i++) {
+  //   platforms[i].x -= platforms[i].speed;
 
-    if (platforms[i].x + platforms[i].width < 0) {
-      platforms[i].x = 1000;
-      platforms[i].y = Math.random() * 500 + 100;
-    }
-    if (rectCollide(player, platforms[i])) {
-      player.onGround = true;
-    }
-  }
+  //   if (platforms[i].x + platforms[i].width < 0) {
+  //     platforms[i].x = 1000;
+  //     platforms[i].y = Math.random() * 500 + 100;
+  //   }
+  // }
 }
 
 //Player
@@ -190,13 +173,19 @@ function playerControl() {
 }
 
 function gameComponents() {
-  // Background/environment and score
-  // ctx.fillStyle = "white";
-  // rect(0, 0, 1000, 600, "fill");
+  //clear previous frame
+  ctx.fillStyle = "rgb(189, 238, 244)";
+  rect(0, 0, 1000, 600, "fill");
+  ctx.fillStyle = "rgb(201, 232, 180)";
+  rect(0, 550, 1000, 600, "fill");
+
+  ctx.font = "20px Consolas";
   ctx.fillStyle = "darkgreen";
+  ctx.fillText(`Score: ${score}`, 20, 580);
 }
 
 function checkCollisions() {
+  //object collision
   for (let i = 0; i < objects.length; i++) {
     if (
       player.y + player.h > objects[i].y &&
@@ -204,16 +193,43 @@ function checkCollisions() {
       player.x + player.w > objects[i].x &&
       player.x < player.x + objects[i].width
     ) {
-      gameOver();
+      state = "gameOver";
     }
+  }
+
+  //obstacle collision
+  for (let i = 0; i < obstacles.length; i++) {
+    if (
+      player.y + player.h > obstacles[i].y &&
+      player.y < player.y + obstacles[i].height &&
+      player.x <= obstacles[i].x + obstacles[i].width &&
+      player.x >= obstacles[i].x
+    ) {
+      player.onGround = true;
+    }
+    if (
+      player.x + player.w > obstacles[i].x &&
+      player.x < player.x + obstacles[i].width &&
+      player.y <= obstacles[i].y + obstacles[i].height &&
+      player.y >= obstacles[i].y
+    ) {
+      player.x -= obstacles[i].speed;
+    }
+
+    if (
+      player.x >= obstacles[i].x + obstacles[i].width &&
+      player.x <= obstacles[i].x
+    ) {
+      player.x = obstacles.x - player.w;
+    }
+  }
+
+  if (player.x <= 0) {
+    state = "gameOver";
   }
 }
 
 function gameOver() {
-  drawGameOver;
-}
-
-function drawGameOver() {
   ctx.fillStyle = "black";
   rect(0, 0, 1000, 600);
 
@@ -229,10 +245,7 @@ function drawGameOver() {
 
   function keyPressHandler(event) {
     if (event.code == "KeyP") {
-      runGame();
-    }
-  }
-}
+      state = "gameOn";
     }
   }
 }
