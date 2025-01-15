@@ -14,7 +14,7 @@ let player = {
   w: 60,
   h: 60,
   onGround: true,
-  gravity: 20,
+  gravity: 18,
   color: "black",
 };
 
@@ -98,7 +98,7 @@ function gameObjects() {
 
     if (objects[i].x + objects[i].width < 0) {
       objects[i].x = 1000;
-      objects[i].y = randomInt(0, 550);
+      objects[i].y = randomInt(0, 450);
     }
   }
 
@@ -185,7 +185,7 @@ function gameComponents() {
 }
 
 function checkCollisions() {
-  //object collision
+  object collision
   for (let i = 0; i < objects.length; i++) {
     if (
       player.y + player.h > objects[i].y &&
@@ -201,24 +201,27 @@ function checkCollisions() {
   for (let i = 0; i < obstacles.length; i++) {
     if (
       player.y + player.h > obstacles[i].y &&
-      player.y < player.y + obstacles[i].height &&
-      player.x <= obstacles[i].x + obstacles[i].width &&
-      player.x >= obstacles[i].x
+      player.x >= obstacles[i].x &&
+      player.x + player.w <= obstacles[i].x + obstacles[i].width
     ) {
+      player.y = obstacles[i].y - player.h;
       player.onGround = true;
+    } else {
+      player.onGround = false;
     }
+
     if (
       player.x + player.w > obstacles[i].x &&
-      player.x < player.x + obstacles[i].width &&
-      player.y <= obstacles[i].y + obstacles[i].height &&
-      player.y >= obstacles[i].y
+      player.x < obstacles[i].x + obstacles[i].width &&
+      player.y >= obstacles[i].y &&
+      player.y + player.h <= obstacles[i].y + obstacles[i].height
     ) {
       player.x -= obstacles[i].speed;
     }
 
     if (
-      player.x >= obstacles[i].x + obstacles[i].width &&
-      player.x <= obstacles[i].x
+      player.x + player.w > obstacles[i].x &&
+      player.x < obstacles[i].x + obstacles[i].w
     ) {
       player.x = obstacles.x - player.w;
     }
@@ -230,16 +233,22 @@ function checkCollisions() {
 }
 
 function gameOver() {
-  ctx.fillStyle = "black";
-  rect(0, 0, 1000, 600);
+  if (score > best) {
+    best = score;
+  }
+
+  setTimeout(runGame, 2000);
+
+  ctx.fillStyle = "rgb(240, 185, 196)";
+  rect(200, 100, 800, 500);
 
   // Game Over Text
   ctx.font = "40px Consolas";
-  ctx.fillStyle = "lightblue";
-  ctx.fillText("GAME OVER", 480, 285);
+  ctx.fillStyle = "black";
+  ctx.fillText("Game Over :(", 480, 285);
   ctx.font = "30px Consolas";
-  ctx.fillText(`SCORE: ${score}`, 490, 265);
-  ctx.fillText(`BEST: ${best}`, 490, 245);
+  ctx.fillText(`Score: ${score}`, 490, 265);
+  ctx.fillText(`Best: ${best}`, 490, 245);
 
   document.addEventListener("keypress", keyPressHandler);
 
@@ -249,3 +258,4 @@ function gameOver() {
     }
   }
 }
+
