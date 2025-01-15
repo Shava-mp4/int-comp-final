@@ -22,7 +22,7 @@ function draw() {
     runGame();
   }
   if (state == "gameOver") {
-    gameOver;
+    gameOver();
   }
 
   requestAnimationFrame(draw);
