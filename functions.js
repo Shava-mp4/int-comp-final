@@ -20,7 +20,7 @@ let player = {
 
 let objects = [];
 
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 4; i++) {
   objects.push({
     x: cnv.width + 250 * i,
     y: randomInt(0, 450),
@@ -185,30 +185,32 @@ function gameComponents() {
 }
 
 function checkCollisions() {
-  object collision
+  // object collision
   for (let i = 0; i < objects.length; i++) {
     if (
       player.y + player.h > objects[i].y &&
-      player.y < player.y + objects[i].height &&
+      player.y < objects[i].y + objects[i].height &&
       player.x + player.w > objects[i].x &&
-      player.x < player.x + objects[i].width
+      player.x < objects[i].x + objects[i].width
     ) {
       state = "gameOver";
     }
   }
 
-  //obstacle collision
+  // obstacle collision
   for (let i = 0; i < obstacles.length; i++) {
     if (
       player.y + player.h > obstacles[i].y &&
-      player.x >= obstacles[i].x &&
-      player.x + player.w <= obstacles[i].x + obstacles[i].width
+      player.x < obstacles[i].x + obstacles[i].width &&
+      player.x + player.w > obstacles[i].x
     ) {
       player.y = obstacles[i].y - player.h;
       player.onGround = true;
     } else {
       player.onGround = false;
     }
+
+    // if player is not jumping and not on the ground, set
 
     if (
       player.x + player.w > obstacles[i].x &&
@@ -237,18 +239,16 @@ function gameOver() {
     best = score;
   }
 
-  setTimeout(runGame, 2000);
-
   ctx.fillStyle = "rgb(240, 185, 196)";
-  rect(200, 100, 800, 500);
+  rect(0, 0, 1000, 600);
 
   // Game Over Text
   ctx.font = "40px Consolas";
   ctx.fillStyle = "black";
-  ctx.fillText("Game Over :(", 480, 285);
+  ctx.fillText("Game Over :(", 390, 305);
   ctx.font = "30px Consolas";
-  ctx.fillText(`Score: ${score}`, 490, 265);
-  ctx.fillText(`Best: ${best}`, 490, 245);
+  ctx.fillText(`Score: ${score}`, 430, 350);
+  ctx.fillText(`Best: ${best}`, 430, 385);
 
   document.addEventListener("keypress", keyPressHandler);
 
@@ -256,6 +256,9 @@ function gameOver() {
     if (event.code == "KeyP") {
       state = "gameOn";
     }
+  }
+}
+
   }
 }
 
