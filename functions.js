@@ -259,6 +259,3 @@ function gameOver() {
   }
 }
 
-  }
-}
-
