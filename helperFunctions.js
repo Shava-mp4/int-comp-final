@@ -45,7 +45,7 @@ function jump() {
     player.gravity--;
 
     //check if back on ground
-    if (player.y + player.h >= 600) {
+    if (player.y + player.h >= 550) {
       player.y = cnv.height - player.h - 50;
       player.onGround = true;
       player.gravity = 20;
